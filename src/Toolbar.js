@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import cn from 'classnames'
 import { navigate } from './utils/constants'
+import withWidth from 'material-ui/utils/withWidth'
 
 class Toolbar extends React.Component {
   static propTypes = {
@@ -11,14 +12,18 @@ class Toolbar extends React.Component {
     messages: PropTypes.object,
     onNavigate: PropTypes.func.isRequired,
     onViewChange: PropTypes.func.isRequired,
+    width: PropTypes.number.isRequired,
   }
 
   render() {
-    let { messages, label } = this.props
+    let { messages, label, width } = this.props
+    const rbcToolbarStyle =
+      width === 1 ? { flexDirection: 'column' } : { flexDirection: 'row' }
+    const margin = width === 1 ? { marginBottom: '10px' } : {}
 
     return (
-      <div className="rbc-toolbar">
-        <span className="rbc-btn-group">
+      <div className="rbc-toolbar" style={rbcToolbarStyle}>
+        <div className="rbc-btn-group" style={margin}>
           <button
             type="button"
             onClick={this.navigate.bind(null, navigate.TODAY)}
@@ -37,11 +42,15 @@ class Toolbar extends React.Component {
           >
             {messages.next}
           </button>
-        </span>
+        </div>
 
-        <span className="rbc-toolbar-label">TEST {label}</span>
+        <div className="rbc-toolbar-label" style={margin}>
+          {label}
+        </div>
 
-        <span className="rbc-btn-group">{this.viewNamesGroup(messages)}</span>
+        <div className="rbc-btn-group" style={margin}>
+          {this.viewNamesGroup(messages)}
+        </div>
       </div>
     )
   }
@@ -73,4 +82,4 @@ class Toolbar extends React.Component {
   }
 }
 
-export default Toolbar
+export default withWidth()(Toolbar)
